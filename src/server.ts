@@ -42,7 +42,8 @@ async function main() {
   }
 
   
-  //handle unhandledRejection
+
+//handle unhandledRejection
   process.on('unhandledRejection', error => {
     if (server) {
       server.close(() => {
@@ -58,9 +59,13 @@ async function main() {
 main();
 
 //SIGTERM
-process.on('SIGTERM', () => {
+process.on('SIGTERM',async () => {
   logger.info('SIGTERM IS RECEIVE');
   if (server) {
-    server.close();
+    server.close(()=>{
+      logger.info('HTTP server closed.');
+      //     // Close DB or Redis here if needed
+          process.exit(0);
+    });
   }
 });
